@@ -2,17 +2,35 @@ package org.awfagi.util;
 
 import org.awfagi.base.BinaryOp;
 import org.awfagi.base.Expression;
+import org.awfagi.base.OperationType;
 import org.awfagi.binary.*;
 import org.awfagi.unary.Num;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
 public class Prettifier {
-    public static Expression prettify(Expression expression){
+
+    private final Map<OperationType, Function<Expression, Expression>> prettifyMap;
+    private final BinaryOpFactory binaryOpFactory= new BinaryOpFactory();
+
+    public Prettifier(){
+        prettifyMap = new HashMap<>();
+        prettifyMap.put(OperationType.PLUS, expression -> prettifyPlus((PlusOp) expression));
+        prettifyMap.put(OperationType.MULTIPLY, expression -> prettifyMultiply((MultiplyOp) expression));
+        prettifyMap.put(OperationType.DIVIDE, expression -> prettifyDivide((DivideOp) expression));
+        prettifyMap.put(OperationType.POWER, expression -> prettifyPower((PowerOp) expression));
+
+    }
+    public Expression prettify(Expression expression){
         if (!(expression instanceof BinaryOp)){
             return expression;
         }
         BinaryOp casted = (BinaryOp) expression;
         Expression left = casted.getLeft();
         Expression right = casted.getRight();
+        OperationType operationType = casted.getOperationType();
 
         left = prettifyBinaryOp(left);
         right = prettifyBinaryOp(right);
@@ -20,38 +38,22 @@ public class Prettifier {
         left = prettify(left);
         right = prettify(right);
 
-        switch (casted.getOperationType()){
-            case PLUS:
-                return prettifyPlus(new PlusOp(left, right));
-            case POWER:
-                return prettifyPower(new PowerOp(left, right));
-            case DIVIDE:
-                return prettifyDivide(new DivideOp(left, right));
-            case MULTIPLY:
-                return prettifyMultiply(new MultiplyOp(left, right));
+        if (prettifyMap.containsKey(operationType)){
+            return prettifyMap.get(operationType).apply(binaryOpFactory.createBinaryOp(operationType, left, right));
         }
 
         return expression;
     }
 
-    private static Expression prettifyBinaryOp(Expression expression){
+    private Expression prettifyBinaryOp(Expression expression){
         if (expression instanceof BinaryOp){
             BinaryOp casted = (BinaryOp) expression;
-            switch (casted.getOperationType()){
-                case PLUS:
-                    expression = prettifyPlus((PlusOp) expression);
-                    break;
-                case DIVIDE:
-                    expression = prettifyDivide((DivideOp) expression);
-                    break;
-                case MULTIPLY:
-                    expression = prettifyMultiply((MultiplyOp) expression);
-                    break;
-                case POWER:
-                    expression = prettifyPower((PowerOp) expression);
-                    break;
+            OperationType operationType = casted.getOperationType();
+            if (prettifyMap.containsKey(operationType)){
+                return prettifyMap.get(operationType).apply(expression);
             }
         }
+
         return expression;
     }
 

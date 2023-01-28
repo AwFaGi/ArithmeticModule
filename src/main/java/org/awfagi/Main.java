@@ -16,6 +16,7 @@ public class Main {
     public static void main(String[] args) {
 
         Expression expression;
+        Prettifier prettifier = new Prettifier();
 
         Variable myVarB = new Variable('b');
         Variable myVarX = new Variable("x_var");
@@ -64,12 +65,12 @@ public class Main {
         System.out.println(semiExpression.derivative(myVarB));
 
         print("Prettified derivative:");
-        System.out.println(Prettifier.prettify(semiExpression.derivative(myVarB)));
+        System.out.println(prettifier.prettify(semiExpression.derivative(myVarB)));
 
         print("Derivative by x_var:");
         System.out.println(semiExpression.derivative(myVarX));
 
         print("Prettified derivative by x_var:");
-        System.out.println(Prettifier.prettify(semiExpression.derivative(myVarX)));
+        System.out.println(prettifier.prettify(semiExpression.derivative(myVarX)));
     }
 }
