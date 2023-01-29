@@ -1,6 +1,6 @@
 package org.awfagi.unary;
 
-import org.awfagi.base.Expression;
+import org.awfagi.interfaces.Expression;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,12 +27,11 @@ public class Num implements Expression {
     }
 
     @Override
-    public boolean sameAs(Expression expression) {
-        return expression instanceof Num && value == ((Num) expression).getValue();
+    public Set<Variable> getVariables() {
+        return new HashSet<>();
     }
 
-    @Override
-    public Set<String> getVariables() {
+    public Set<String> getVariablesAsString() {
         return new HashSet<>();
     }
 
@@ -45,8 +44,26 @@ public class Num implements Expression {
         return value;
     }
 
+
+
     @Override
     public String toString() {
         return String.valueOf(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Num num = (Num) o;
+
+        return Double.compare(num.value, value) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        long temp = Double.doubleToLongBits(value);
+        return (int) (temp ^ (temp >>> 32));
     }
 }

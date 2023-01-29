@@ -1,6 +1,6 @@
 package org.awfagi.util;
 
-import org.awfagi.base.Expression;
+import org.awfagi.interfaces.Expression;
 import org.awfagi.unary.Num;
 
 public class Nums {

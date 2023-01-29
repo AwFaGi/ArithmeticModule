@@ -1,18 +1,17 @@
 package org.awfagi.util;
 
-import org.awfagi.base.Expression;
 import org.awfagi.binary.DivideOp;
 import org.awfagi.binary.MultiplyOp;
 import org.awfagi.binary.PlusOp;
 import org.awfagi.binary.PowerOp;
+import org.awfagi.interfaces.Expression;
 import org.awfagi.unary.Num;
 import org.awfagi.unary.Variable;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PrettifierTest {
     private static Expression semiExpression;
@@ -55,6 +54,6 @@ public class PrettifierTest {
         Expression actual = prettifier.prettify(semiExpression.derivative(myVarX));
         Expression expected = Nums.ZERO;
 
-        assertTrue(expected.sameAs(actual));
+        assertEquals(expected, actual);
     }
 }

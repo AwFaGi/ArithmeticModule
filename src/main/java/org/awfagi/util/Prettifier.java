@@ -1,8 +1,7 @@
 package org.awfagi.util;
 
-import org.awfagi.base.BinaryOp;
-import org.awfagi.base.Expression;
-import org.awfagi.base.OperationType;
+import org.awfagi.binary.BinaryOp;
+import org.awfagi.interfaces.Expression;
 import org.awfagi.binary.*;
 import org.awfagi.unary.Num;
 
@@ -12,15 +11,15 @@ import java.util.function.Function;
 
 public class Prettifier {
 
-    private final Map<OperationType, Function<Expression, Expression>> prettifyMap;
+    private final Map<BinaryOp.OperationType, Function<Expression, Expression>> prettifyMap;
     private final BinaryOpFactory binaryOpFactory= new BinaryOpFactory();
 
     public Prettifier(){
         prettifyMap = new HashMap<>();
-        prettifyMap.put(OperationType.PLUS, expression -> prettifyPlus((PlusOp) expression));
-        prettifyMap.put(OperationType.MULTIPLY, expression -> prettifyMultiply((MultiplyOp) expression));
-        prettifyMap.put(OperationType.DIVIDE, expression -> prettifyDivide((DivideOp) expression));
-        prettifyMap.put(OperationType.POWER, expression -> prettifyPower((PowerOp) expression));
+        prettifyMap.put(BinaryOp.OperationType.PLUS, expression -> prettifyPlus((PlusOp) expression));
+        prettifyMap.put(BinaryOp.OperationType.MULTIPLY, expression -> prettifyMultiply((MultiplyOp) expression));
+        prettifyMap.put(BinaryOp.OperationType.DIVIDE, expression -> prettifyDivide((DivideOp) expression));
+        prettifyMap.put(BinaryOp.OperationType.POWER, expression -> prettifyPower((PowerOp) expression));
 
     }
     public Expression prettify(Expression expression){
@@ -30,7 +29,7 @@ public class Prettifier {
         BinaryOp casted = (BinaryOp) expression;
         Expression left = casted.getLeft();
         Expression right = casted.getRight();
-        OperationType operationType = casted.getOperationType();
+        BinaryOp.OperationType operationType = casted.getOperationType();
 
         left = prettifyBinaryOp(left);
         right = prettifyBinaryOp(right);
@@ -48,7 +47,7 @@ public class Prettifier {
     private Expression prettifyBinaryOp(Expression expression){
         if (expression instanceof BinaryOp){
             BinaryOp casted = (BinaryOp) expression;
-            OperationType operationType = casted.getOperationType();
+            BinaryOp.OperationType operationType = casted.getOperationType();
             if (prettifyMap.containsKey(operationType)){
                 return prettifyMap.get(operationType).apply(expression);
             }
@@ -59,10 +58,10 @@ public class Prettifier {
 
     private static Expression prettifyPlus(PlusOp expression){
 
-        if (expression.getLeft().sameAs(Nums.ZERO)){
+        if (expression.getLeft().equals(Nums.ZERO)){
             return expression.getRight();
         }
-        if (expression.getRight().sameAs(Nums.ZERO)){
+        if (expression.getRight().equals(Nums.ZERO)){
             return expression.getLeft();
         }
 
@@ -77,13 +76,13 @@ public class Prettifier {
 
     private static Expression prettifyMultiply(MultiplyOp expression){
 
-        if (expression.getLeft().sameAs(Nums.ZERO) || expression.getRight().sameAs(Nums.ZERO)){
+        if (expression.getLeft().equals(Nums.ZERO) || expression.getRight().equals(Nums.ZERO)){
             return Nums.ZERO;
         }
-        if (expression.getLeft().sameAs(Nums.ONE)){
+        if (expression.getLeft().equals(Nums.ONE)){
             return expression.getRight();
         }
-        if (expression.getRight().sameAs(Nums.ONE)){
+        if (expression.getRight().equals(Nums.ONE)){
             return expression.getLeft();
         }
 
@@ -102,7 +101,7 @@ public class Prettifier {
 
     private static Expression prettifyDivide(DivideOp expression){
 
-        if (expression.getLeft().sameAs(Nums.ZERO) && !expression.getRight().sameAs(Nums.ZERO)){
+        if (expression.getLeft().equals(Nums.ZERO) && !expression.getRight().equals(Nums.ZERO)){
             return Nums.ZERO;
         }
 
@@ -117,15 +116,15 @@ public class Prettifier {
 
     private static Expression prettifyPower(PowerOp expression){
 
-        if (expression.getLeft().sameAs(Nums.ZERO) && !expression.getRight().sameAs(Nums.ZERO)){
+        if (expression.getLeft().equals(Nums.ZERO) && !expression.getRight().equals(Nums.ZERO)){
             return Nums.ZERO;
         }
 
-        if (!expression.getLeft().sameAs(Nums.ZERO) && expression.getRight().sameAs(Nums.ZERO)){
+        if (!expression.getLeft().equals(Nums.ZERO) && expression.getRight().equals(Nums.ZERO)){
             return Nums.ONE;
         }
 
-        if (expression.getRight().sameAs(Nums.ONE)){
+        if (expression.getRight().equals(Nums.ONE)){
             return expression.getLeft();
         }
 

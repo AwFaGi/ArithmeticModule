@@ -1,8 +1,6 @@
 package org.awfagi.binary;
 
-import org.awfagi.base.BinaryOp;
-import org.awfagi.base.Expression;
-import org.awfagi.base.OperationType;
+import org.awfagi.interfaces.Expression;
 import org.awfagi.exceptions.BadVariablesNumberException;
 import org.awfagi.unary.Variable;
 

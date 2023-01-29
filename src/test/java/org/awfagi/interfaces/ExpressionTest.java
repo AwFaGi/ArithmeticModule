@@ -1,4 +1,4 @@
-package org.awfagi.base;
+package org.awfagi.interfaces;
 
 import org.awfagi.binary.DivideOp;
 import org.awfagi.binary.MultiplyOp;
@@ -51,16 +51,16 @@ public class ExpressionTest {
     public void cloneTest(){
         Expression cloned = expression.selfClone();
 
-        assertTrue(cloned.sameAs(expression));
+        assertEquals(cloned, expression);
     }
 
     @Test
     public void variablesTest(){
-        Set<String> variables = expression.getVariables();
+        Set<Variable> variables = expression.getVariables();
 
         assertEquals(2, variables.size());
-        assertTrue(variables.contains(myVarB.toString()));
-        assertTrue(variables.contains(myVarX.toString()));
+        assertTrue(variables.contains(myVarB));
+        assertTrue(variables.contains(myVarX));
     }
 
     @Test

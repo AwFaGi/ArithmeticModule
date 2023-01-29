@@ -1,4 +1,4 @@
-package org.awfagi.base;
+package org.awfagi.interfaces;
 
 public interface Computable {
     double valueAt(double value);

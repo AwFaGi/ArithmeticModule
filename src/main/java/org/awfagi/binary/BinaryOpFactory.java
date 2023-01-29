@@ -1,11 +1,9 @@
 package org.awfagi.binary;
 
-import org.awfagi.base.BinaryOp;
-import org.awfagi.base.Expression;
-import org.awfagi.base.OperationType;
+import org.awfagi.interfaces.Expression;
 
 public class BinaryOpFactory {
-    public BinaryOp createBinaryOp(OperationType type, Expression left, Expression right){
+    public BinaryOp createBinaryOp(BinaryOp.OperationType type, Expression left, Expression right){
         switch (type){
             case PLUS:
                 return new PlusOp(left, right);
